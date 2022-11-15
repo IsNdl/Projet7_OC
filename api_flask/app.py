@@ -38,7 +38,3 @@ def predict_client_with_id(id_client):
     print(client)
     proba = model.predict_proba(client)[:, 1][0]  # [0][1]  # or [0][0]  # or [:, 1][0]
     return jsonify(str(proba))
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
