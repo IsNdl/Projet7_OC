@@ -10,9 +10,12 @@ from flask import Flask, jsonify
 path = "C:/Users/I-NL/Documents/Projet7_OC/"
 data = pd.read_csv(path+"p7_clean_dataset_for_ml.csv",
                    nrows=200)
+x = data.drop(['SK_ID_CURR', 'TARGET'], axis=1)
+y = data['TARGET']
 # Load the model
 model = pickle.load(open(path+"pipeline_sgd_model.pkl", 'rb'))
-
+# model = pickle.load(open(path+"lgbm_model.pkl", 'rb'))
+model.fit(x, y)
 
 # API
 app = Flask(__name__)
@@ -21,14 +24,6 @@ app = Flask(__name__)
 @app.route("/")
 def loaded():
     return "API, model and data loaded"
-
-
-# @app.route('/{id_client}', methods=['GET'])
-# def get_id_client():
-    # id_client = request.args.get("id_client", None)
-    # id_client à taper sur la barre d'adresse
-    # reprendre ID avec methode get --> int
-    #  return jsonify(id_client)
 
 
 @app.route("/predict/<id_client>", methods=['GET'])
@@ -41,9 +36,9 @@ def predict_client_with_id(id_client):
     id_client = int(float(id_client))
     client = data[data['SK_ID_CURR'] == id_client].drop(['SK_ID_CURR', 'TARGET'], axis=1)
     print(client)
-    proba = model.predict_proba(client)[:, 1][0]  # or [0][0]
-    return jsonify(proba)
+    proba = model.predict_proba(client)[:, 1][0]  # [0][1]  # or [0][0]  # or [:, 1][0]
+    return jsonify(str(proba))
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
