@@ -7,11 +7,11 @@ import pickle
 from flask import Flask, jsonify
 
 # Load the data
-path = "C:/Users/I-NL/Documents/Projet7_OC/"
-data = pd.read_csv(path+"p7_clean_dataset_for_ml.csv",
+# path = "C:/Users/I-NL/Documents/Projet7_OC/"
+data = pd.read_csv("small_dataset_for_api.csv",
                    nrows=200)
 # Load the model
-model = pickle.load(open(path+"pipeline_sgd_model.pkl", 'rb'))
+model = pickle.load(open("pipeline_sgd_model.pkl", 'rb'))
 
 
 # API
